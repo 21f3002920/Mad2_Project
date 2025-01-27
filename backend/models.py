@@ -10,7 +10,7 @@ class User(db.Model,UserMixin):
     #flask_Security feature
     fs_uniquifier=db.Column(db.String, unique=True, nullable=False)
     active=db.Column(db.Boolean, default=True)
-    role-db.Relationship('Role', backref='bearers', secondary='user_roles')
+    roles=db.Relationship('Role', backref='bearers', secondary='user_roles')
 
     
 class Role(db.Model,RoleMixin):
