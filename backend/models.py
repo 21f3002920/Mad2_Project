@@ -3,6 +3,7 @@ from flask_security import UserMixin, RoleMixin
 
 db=SQLAlchemy()
 
+#Database Schema for Users
 class User(db.Model,UserMixin):
     id=db.Column(db.Integer, primary_key=True)
     email=db.Column(db.String, unique=True, nullable=False)
