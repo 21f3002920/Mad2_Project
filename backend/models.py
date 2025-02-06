@@ -43,7 +43,7 @@ class Service(db.Model):
 
 
 
-class ServiceRequest(db.Model):
+'''class ServiceRequest(db.Model):
     __tablename__='servicerequest'
     service_request_id=db.Column(db.Integer, primary_key=True)
     service_id=db.Column(db.Integer, db.ForeignKey('service.id'), nullable=False)
@@ -72,4 +72,4 @@ class Professional(db.Model):
     p_duty=db.Column(db.String, nullable=False)
     p_aadhaarnumber=db.Column(db.Integer, nullable=False)
     p_phone=db.Column(db.Integer, nullable=False)
-    p_pincode=db.Column(db.Integer, nullable=False)
+    p_pincode=db.Column(db.Integer, nullable=False)'''

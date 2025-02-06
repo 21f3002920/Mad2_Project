@@ -16,6 +16,7 @@ def protected():
 @app.route('/login', methods=['POST'])
 def login():
     data=request.get_json()
+
     email=data.get('email')
     password=data.get('password')
 
@@ -34,23 +35,24 @@ def login():
 
 @app.route('/register', methods=['POST'])
 def register():
-    data=request.get_json()
-    email=data.get('email')
-    password=data.get('password')
-    role=data.get('role')
+    data = request.get_json()
 
-    if not email or not password or role not in ['admin','customer','professional']:
-        return jsonify({"message" : "Invalid Inputs"}), 404
+    email = data.get('email')
+    password = data.get('password')
+    role = data.get('role')
 
-    user=datastore.find_user(email=email)
+    if not email or not password or role not in ['Customer', 'Professional']:
+        return jsonify({"message" : "invalid inputs"}), 404
+    
+    user = datastore.find_user(email = email)
 
     if user:
-        return jsonify({"message" : "User already exists"}), 404
+        return jsonify({"message" : "user already exists"}), 404
 
-    try:
-        datastore.create_user(email=email, password=hash_password(password), roles=[role], active=True)
+    try :
+        datastore.create_user(email = email, password = hash_password(password), roles = [role], active = True)
         db.session.commit()
-        return jsonify({"message" : "User created"}), 200
+        return jsonify({"message" : "user created"}), 200
     except:
         db.session.rollback()
-        return jsonify({"message" : "Error in creating user"}), 400
+        return jsonify({"message" : "error creating user"}), 400
