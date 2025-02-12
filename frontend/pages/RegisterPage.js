@@ -1,10 +1,16 @@
 export default {
     template : `
-    <div>
+    <div class="main-content">
+    <div class="input-field">
         <input placeholder="email"  v-model="email"/>  
         <input placeholder="password"  v-model="password"/>  
-        <input placeholder="role"  v-model="role"/>  
-        <button @click="submitLogin"> Register </button>
+        <select v-model="role" class="form-input" required>
+          <option value="" disabled selected>Select Role</option>
+          <option value="Customer">Customer</option>
+          <option value="Professional">Professional</option>
+        </select>
+    </div>
+        <button class="button" @click="submitLogin"> Register </button>
     </div>
     `,
     data(){
