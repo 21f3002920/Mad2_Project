@@ -30,7 +30,7 @@ export default {
                 this.$store.commit('setUser')
                 if (data.role == "Admin"){
                     console.log("Hi Admin")
-                    this.$router.push('/Admin')
+                    this.$router.push('/Admindashboard')
                 }
                 else if (data.role == "Customer"){
                     console.log("Hi Customer")

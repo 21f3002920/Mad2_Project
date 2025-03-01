@@ -1,10 +1,10 @@
-import Servicecard from "../components/Servicecard.js"
+import Servicecard from "../../components/Servicecard.js"
 
 export default {
     template : `
     <div class="main-content">
         <h1>Service list</h1>
-        <Servicecard v-for="service in services" :service_name="service.service_name" :service_description="service.service_description"> 
+        <Servicecard v-for="service in services" :service_id="service.service_id" :service_name="service.service_name" :service_time="service.service_time" :service_description="service.service_description" :service_baseprice="service.service_baseprice"></Servicecard>
     </div>
     `, 
     data(){

@@ -14,7 +14,7 @@ service_fields= {
 }
 
 #Search and Deleting Services
-class BlogAPI(Resource):
+class ServiceAPI(Resource):
     @marshal_with(service_fields)
     @auth_required('token')
     def get(self, service_id):
@@ -25,7 +25,7 @@ class BlogAPI(Resource):
         return service
 
     @auth_required('token')
-    def get(self, service_id):
+    def delete(self, service_id):
         service=Service.query.get(service_id)
 
         if not service:
@@ -36,7 +36,7 @@ class BlogAPI(Resource):
             db.session.commit()
 
 # Display and add Services
-class BlogListAPI(Resource):
+class ServiceListAPI(Resource):
     @marshal_with(service_fields)
     @auth_required('token')
     def get(self):
@@ -61,5 +61,5 @@ class BlogListAPI(Resource):
 
 
 
-api.add_resource(BlogAPI, '/services/<int:service_id>')
-api.add_resource(BlogListAPI, '/services')
+api.add_resource(ServiceAPI, '/services/<int:service_id>')
+api.add_resource(ServiceListAPI, '/services')
