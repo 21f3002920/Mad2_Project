@@ -5,8 +5,8 @@ export default {
         <input placeholder="email"  v-model="email"/>  
         <input placeholder="password"  v-model="password"/> 
     </div> 
-        <select v-model="role" class="form-input" required>
-          <option value="" disabled selected>Select Role</option>
+        <select v-model="role" class="input-field" required>
+          <option value="" disabled>Select Role</option>
           <option value="Customer">Customer</option>
           <option value="Professional">Professional</option>
         </select>
@@ -17,7 +17,7 @@ export default {
         return {
             email : null,
             password : null,
-            role : null,
+            role : "",
         } 
     },
     methods : {
