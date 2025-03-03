@@ -2,7 +2,9 @@ export default {
     template:`
     <div class="main-content">
             
-            <h2>CUSTOMER Dashboard</h2> 
+    <h1>CUSTOMER</h1> 
+    <h2>Dashboard</h2> 
+    <h2>--------------</h2> 
         <div class="button">
             <router-link to="/Customerdashboard/Service" class="navbarcentre">Search New Service</router-link>
         </div>

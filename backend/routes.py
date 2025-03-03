@@ -21,17 +21,17 @@ def login():
     password=data.get('password')
 
     if not email or not password:
-        return jsonify({"message" : "Invalid Inputs"}), 404
+        return jsonify({'message' : "Invalid Inputs"}), 422
 
     user=datastore.find_user(email=email)
 
     if not user:
-        return jsonify({"message" : "Invalid Email or Password"}), 404
+        return jsonify({'message' : "Incorect Email or Password"}), 401
     
     if verify_password(password, user.password):
         return jsonify({'token' : user.get_auth_token(), 'email' : user.email, 'role' : user.roles[0].name, 'id' : user.id})
     
-    return jsonify({"message" : "Wrong Password"}), 400
+    return jsonify({'message' : "Incorect Email or Password. Please try again."}), 400
 
 @app.route('/register', methods=['POST'])
 def register():

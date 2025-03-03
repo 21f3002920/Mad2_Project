@@ -22,8 +22,6 @@ import AdminDashboard from "../pages/ADMIN/AdminDashboard.js";
 import AdminDashboardService from "../pages/ADMIN/AdminDashboardService.js";
 import AdminDashboardCustomer from "../pages/ADMIN/AdminDashboardCustomer.js";
 import AdminDashboardProfessional from "../pages/ADMIN/AdminDashboardProfessional.js";
-import AdminService from "../pages/ADMIN/AdminService.js";
-import AdminDisplayService from "../pages/ADMIN/AdminDisplayService.js";
 import CustomerDashboard from "../pages/CUSTOMER/CustomerDashboard.js";
 import ProfessionalDashboard from "../pages/PROFESSIONAL/ProfessionalDashboard.js";
 import CustomerService from "../pages/CUSTOMER/CustomerService.js";
@@ -37,16 +35,14 @@ const routes = [
     {path : '/Login', component : LoginPage},
     {path : '/Register', component : RegisterPage},
     {path : '/Admindashboard', component : AdminDashboard, meta : {requiresLogin : true, role : "Admin"}},
-    {path : '/Admindashboardservice', component : AdminDashboardService, meta : {requiresLogin : true, role : "Admin"}},
+    {path : '/AdmindashboardService', component : AdminDashboardService, meta : {requiresLogin : true, role : "Admin"}},
     {path : '/Admindashboardcustomer', component : AdminDashboardCustomer, meta : {requiresLogin : true, role : "Admin"}},
     {path : '/Admindashboardprofessional', component : AdminDashboardProfessional, meta : {requiresLogin : true, role : "Admin"}},
-
-    {path : '/Admindashboard/Service', component : AdminService, meta : {requiresLogin : true, role : "Admin"}},
-    {path : '/Admindashboard/Service/:id', component : AdminDisplayService, props :true, meta : {requiresLogin : true, role : "Admin"}},
     
     {path : '/Customerdashboard', component : CustomerDashboard, meta : {requiresLogin : true, role : "Customer"}},
     {path : '/Customerdashboard/Service', component : CustomerService, meta : {requiresLogin : true, role : "Customer"}},
     {path : '/Customerdashboard/Service/:id', component : CustomerDisplayService, props :true, meta : {requiresLogin : true, role : "Customer"}},
+
 
 
 

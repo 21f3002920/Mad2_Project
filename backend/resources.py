@@ -34,6 +34,7 @@ class ServiceAPI(Resource):
         if current_user.id == 1:
             db.session.delete(service)
             db.session.commit()
+            return {"message": "Service deleted"}, 200
 
 # Display and add Services
 class ServiceListAPI(Resource):

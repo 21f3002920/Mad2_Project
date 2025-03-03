@@ -6,7 +6,7 @@ export default {
     <h2>Dashboard</h2> 
     <h2>--------------</h2>  
         <div class="button">
-            <router-link to="/Admindashboardservice" class="navbarcentre">Service Management</router-link>
+            <router-link to="/AdmindashboardService" class="navbarcentre">Service Management</router-link>
         </div>
         <div class="button">
             <router-link to="/Admindashboardcustomer" class="navbarcentre">Customer Management</router-link>

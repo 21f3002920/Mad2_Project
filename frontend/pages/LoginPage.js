@@ -16,15 +16,19 @@ export default {
     },
     methods : {
         async submitLogin(){
+            try{
             const res= await fetch(location.origin+'/login',
                 {
                     method : 'POST',
                     headers : {'Content-Type': 'application/json'}, 
                     body : JSON.stringify({'email':this.email,'password':this.password})
-                })
-            if(res.ok){
-                console.log('we are logged in')
+                });
                 const data= await res.json()
+            
+            if(!res.ok){
+                throw new Error(data.message || "Login failed");
+            }
+                
                 console.log(data)
                 localStorage.setItem('user', JSON.stringify(data))
                 this.$store.commit('setUser')
@@ -39,7 +43,11 @@ export default {
                 else if (data.role == "Professional"){
                     console.log("Hi Professional")
                     this.$router.push('/Professionaldashboard')
-                }
+                } }
+                catch (error) {
+                    console.error("Login Error:", error.message);
+                    this.errorMessage = error.message;
+                    setTimeout(() => alert(error.message), 100);
                     
             }
         }
