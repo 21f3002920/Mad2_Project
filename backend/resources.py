@@ -28,13 +28,30 @@ class ServiceAPI(Resource):
     def delete(self, service_id):
         service=Service.query.get(service_id)
 
-        if not service:
-            return {"message" : "Service not found"}, 404
-
         if current_user.id == 1:
             db.session.delete(service)
             db.session.commit()
-            return {"message": "Service deleted"}, 200
+
+    @auth_required('token')
+    def put(self, service_id):
+        
+        if current_user.id != 1:
+            return {"message": "Unauthorized"}, 403
+ 
+        service = Service.query.get(service_id)
+        if not service:
+            return {"message" : "Service not found"}, 404
+        
+        data = request.get_json()
+        service_name=data.get('service_name')
+        service_baseprice=data.get('service_baseprice')
+        service_time=data.get('service_time')
+        service_description=data.get('service_description')
+        service.service_name = service_name
+        service.service_baseprice = service_baseprice
+        service.service_time = service_time
+        service.service_description = service_description
+        db.session.commit()
 
 # Display and add Services
 class ServiceListAPI(Resource):
