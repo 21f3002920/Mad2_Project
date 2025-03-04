@@ -1,8 +1,12 @@
-from flask import current_app as app, request, jsonify, render_template
+from flask import current_app as app, request, jsonify, render_template, send_from_directory
 from flask_security import auth_required, verify_password, hash_password
 from backend.models import db, Customer, Service, Professional
 
 datastore= app.security.datastore
+
+@app.route('/static/images/<path:filename>')
+def serve_static_image(filename):
+    return send_from_directory('static/images', filename)
 
 @app.get('/')
 def home():
