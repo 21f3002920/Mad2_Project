@@ -1,5 +1,5 @@
 from flask import current_app as app
-from backend.models import db
+from backend.models import db, Customer, Professional, Service
 from flask_security import SQLAlchemyUserDatastore, hash_password
 
 with app.app_context():
@@ -19,3 +19,55 @@ with app.app_context():
         userdatastore.create_user(email = 'user02@study.iitm.ac.in', password = hash_password('pass'), roles = ['Professional'] ) # for testing
 
     db.session.commit()
+
+    customer_user = userdatastore.find_user(email='user01@study.iitm.ac.in')
+    professional_user = userdatastore.find_user(email='user02@study.iitm.ac.in')
+
+    # Insert Initial Customer Data
+    new_customer = Customer(
+        c_name="Rishab R",
+        c_userid=customer_user.id,
+        c_flag=0,
+        c_address="Bangalore",
+        c_pincode=560099,
+        c_phone=9876543210
+        )
+    db.session.add(new_customer)
+    db.session.commit()
+
+    new_professional = Professional(
+        p_userid=professional_user.id,
+        p_serviceid=2,
+        p_experience=3,
+        p_flag=0,
+        p_name="Raghu",
+        p_aadhaarnumber="555555555555",
+        p_phone=9887765544,
+        p_pincode=560089
+    )
+    db.session.add(new_professional)
+    db.session.commit()
+
+    new_service1 = Service(
+        service_name="Haircut for Men",
+        service_baseprice=1000,
+        service_time=2,
+        service_description="Haircut and Beard shape up for Men"
+    )
+    new_service2 = Service(
+        service_name="Car Washing",
+        service_baseprice=500,
+        service_time=1,
+        service_description="Interior and Exterior cleaning"
+    )
+    new_service3 = Service(
+        service_name="Pool Cleaning",
+        service_baseprice=2000,
+        service_time=3,
+        service_description="Cleaning and Chlorination of Swimming Pool"
+    )
+    db.session.add(new_service1)
+    db.session.add(new_service2)
+    db.session.add(new_service3)
+    db.session.commit()
+    

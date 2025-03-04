@@ -33,10 +33,29 @@ class Service(db.Model):
     service_time=db.Column(db.Integer, nullable=False)
     service_description=db.Column(db.String,nullable=False)
 
+class Customer(db.Model):
+    __tablename__='customer'
+    c_id=db.Column(db.Integer, primary_key=True)
+    c_name=db.Column(db.String, nullable=False)
+    c_userid=db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    c_flag=db.Column(db.Integer, nullable=False)
+    c_address=db.Column(db.String, nullable=False)
+    c_pincode=db.Column(db.Integer, nullable=False)
+    c_phone=db.Column(db.Integer, nullable=False)
 
-
-
-
+class Professional(db.Model):
+    __tablename__='professional'
+    p_id = db.Column(db.Integer, primary_key=True)
+    p_name=db.Column(db.String, nullable=False)
+    p_userid=db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    p_serviceid=db.Column(db.Integer, db.ForeignKey('service.service_id'), nullable=False)
+    p_experience=db.Column(db.Integer, nullable=False)
+    p_flag=db.Column(db.Integer, nullable=False)
+    p_pincode=db.Column(db.Integer, nullable=False)
+    p_phone=db.Column(db.Integer, nullable=False)
+    p_aadhaarnumber=db.Column(db.String, nullable=False)
+    
+    
 
 
 
@@ -53,23 +72,8 @@ class Service(db.Model):
     date_of_completion=db.Column(db.Date, nullable=True)
     service_status=db.Column(db.String, nullable=False)
 
-class Customer(db.Model):
-    __tablename__='customer'
-    c_id=db.Column(db.Integer, primary_key=True)
-    c_userid=db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    c_flag=db.Column(db.Integer, nullable=False)
-    c_address=db.Column(db.String, nullable=False)
-    c_pincode=db.Column(db.Integer, nullable=False)
-    c_phone=db.Column(db.Integer, nullable=False)
+    
 
-class Professional(db.Model):
-    __tablename__='professional'
-    p_id = db.Column(db.Integer, primary_key=True)
-    p_userid=db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    p_serviceid=db.Column(db.Integer, db.ForeignKey('service.id'), nullable=False)
-    p_experience=db.Column(db.Integer, nullable=False)
-    p_flag=db.Column(db.Integer, nullable=False)
-    p_duty=db.Column(db.String, nullable=False)
-    p_aadhaarnumber=db.Column(db.Integer, nullable=False)
-    p_phone=db.Column(db.Integer, nullable=False)
-    p_pincode=db.Column(db.Integer, nullable=False)'''
+
+
+'''

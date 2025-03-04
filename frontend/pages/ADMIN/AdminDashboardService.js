@@ -87,8 +87,9 @@ export default {
         async updateService(service_id, updatedData) {
             const index = this.services.findIndex(service => service.service_id === service_id);
             if (index !== -1) {
-                this.$set(this.services, index, {...this.services, ...updatedData});  //$set() method ensure reactivity for updating website dynamically
+                this.$set(this.services, index, { ...this.services[index], ...updatedData }); //$set() method ensure reactivity for updating website dynamically
             }
+            await this.fetchServices();
         }
        
     },
