@@ -41,6 +41,7 @@ with app.app_context():
         p_experience=3,
         p_flag=0,
         p_name="Raghu",
+        p_active=True,
         p_aadhaarnumber="555555555555",
         p_phone=9887765544,
         p_pincode=560089

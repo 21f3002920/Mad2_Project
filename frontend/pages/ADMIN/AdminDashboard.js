@@ -9,7 +9,7 @@ export default {
             <router-link to="/AdmindashboardService" class="navbarcentre">Service Management</router-link>
         </div>
         <div class="button">
-            <router-link to="/Admindashboardcustomer" class="navbarcentre">Customer Management</router-link>
+            <router-link to="/AdmindashboardCustomer" class="navbarcentre">Customer Management</router-link>
         </div>
         <div class="button">
             <router-link to="/Admindashboardprofessional" class="navbarcentre">Professional Management</router-link>

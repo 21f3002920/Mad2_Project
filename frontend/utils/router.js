@@ -36,8 +36,8 @@ const routes = [
     {path : '/Register', component : RegisterPage},
     {path : '/Admindashboard', component : AdminDashboard, meta : {requiresLogin : true, role : "Admin"}},
     {path : '/AdmindashboardService', component : AdminDashboardService, meta : {requiresLogin : true, role : "Admin"}},
-    {path : '/Admindashboardcustomer', component : AdminDashboardCustomer, meta : {requiresLogin : true, role : "Admin"}},
-    {path : '/Admindashboardprofessional', component : AdminDashboardProfessional, meta : {requiresLogin : true, role : "Admin"}},
+    {path : '/AdmindashboardCustomer', component : AdminDashboardCustomer, meta : {requiresLogin : true, role : "Admin"}},
+    {path : '/AdmindashboardProfessional', component : AdminDashboardProfessional, meta : {requiresLogin : true, role : "Admin"}},
     
     {path : '/Customerdashboard', component : CustomerDashboard, meta : {requiresLogin : true, role : "Customer"}},
     {path : '/Customerdashboard/Service', component : CustomerService, meta : {requiresLogin : true, role : "Customer"}},

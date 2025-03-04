@@ -51,6 +51,7 @@ class Professional(db.Model):
     p_serviceid=db.Column(db.Integer, db.ForeignKey('service.service_id'), nullable=False)
     p_experience=db.Column(db.Integer, nullable=False)
     p_flag=db.Column(db.Integer, nullable=False)
+    p_active=db.Column(db.Boolean, default=False)
     p_pincode=db.Column(db.Integer, nullable=False)
     p_phone=db.Column(db.Integer, nullable=False)
     p_aadhaarnumber=db.Column(db.String, nullable=False)
