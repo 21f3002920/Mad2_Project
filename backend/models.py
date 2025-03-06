@@ -56,25 +56,18 @@ class Professional(db.Model):
     p_phone=db.Column(db.Integer, nullable=False)
     p_aadhaarnumber=db.Column(db.String, nullable=False)
     
-    
+class ServiceRequest(db.Model):
+    sr_id = db.Column(db.Integer, primary_key=True)
+    sr_customerid = db.Column(db.Integer, db.ForeignKey('customer.c_id'), nullable=False)
+    sr_professionalid = db.Column(db.Integer, db.ForeignKey('professional.p_id'), nullable=False)
+    sr_serviceid = db.Column(db.Integer, db.ForeignKey('service.service_id'), nullable=False)
+    sr_status = db.Column(db.String(20), default="Pending")
+    sr_created_at = db.Column(db.String, nullable=False)
+    sr_closed_at = db.Column(db.String, nullable=True)
 
 
-
-
-
-
-'''class ServiceRequest(db.Model):
-    __tablename__='servicerequest'
-    service_request_id=db.Column(db.Integer, primary_key=True)
-    service_id=db.Column(db.Integer, db.ForeignKey('service.id'), nullable=False)
-    customer_id=db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    professional_id=db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    date_of_request=db.Column(db.Date, nullable=True)
-    date_of_completion=db.Column(db.Date, nullable=True)
-    service_status=db.Column(db.String, nullable=False)
 
     
 
 
 
-'''
