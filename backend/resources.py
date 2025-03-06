@@ -1,7 +1,8 @@
 from flask import request, jsonify
 from flask_restful import Api, Resource, fields, marshal_with
+from datetime import datetime
 from flask_security import auth_required, current_user
-from backend.models import db, User,Service, Customer, Professional
+from backend.models import db, User,Service, Customer, Professional, ServiceRequest
 
 api=Api(prefix='/api')
 
@@ -126,7 +127,7 @@ class CustomerAPI(Resource):
     @auth_required('token')
     def put(self, c_id):
         if current_user.roles[0].name != 'Admin':
-            return {"message": "Unauthorized"}, 403
+            return {"message": "Unauthorized Action"}, 403
 
         customer = Customer.query.filter_by(c_id=c_id).first()
         if not customer:
@@ -136,13 +137,13 @@ class CustomerAPI(Resource):
         if not user:
             return {"message": "User not found"}, 404
 
-        user.active = not user.active  # Toggle active status
+        user.active = not user.active  
         db.session.commit()
 
     @auth_required('token')
     def delete(self, c_id):
         if current_user.roles[0].name != 'Admin':
-            return {"message": "Unauthorized"}, 403
+            return {"message": "Unauthorized Action"}, 403
 
         customer = Customer.query.filter_by(c_id=c_id).first()
         if not customer:
@@ -191,7 +192,7 @@ class ProfessionalAPI(Resource):
     @auth_required('token')
     def put(self, p_id):
         if current_user.roles[0].name != 'Admin':
-            return {"message": "Unauthorized"}, 403
+            return {"message": "Unauthorized Action"}, 403
 
         professional = Professional.query.filter_by(p_id=p_id).first()
         if not professional:
@@ -208,7 +209,7 @@ class ProfessionalAPI(Resource):
     @auth_required('token')
     def delete(self, p_id):
         if current_user.roles[0].name != 'Admin':
-            return {"message": "Unauthorized"}, 403
+            return {"message": "Unauthorized Action"}, 403
 
         professional = Professional.query.filter_by(p_id=p_id).first()
         if not professional:
@@ -224,3 +225,104 @@ class ProfessionalAPI(Resource):
     
 api.add_resource(ProfessionalListAPI, '/professionals')
 api.add_resource(ProfessionalAPI, '/professionals/<int:p_id>')
+
+
+# SERVICERQUEST SERVICERQUEST SERVICERQUEST SERVICERQUEST SERVICERQUEST SERVICERQUEST SERVICERQUEST SERVICERQUEST SERVICERQUEST SERVICERQUEST SERVICERQUEST
+
+class ProfessionalsByServiceAPI(Resource):
+    @auth_required('token')
+    def get(self, service_id):
+        try:
+            service_id = int(service_id)  # Ensure it's an integer
+            print(f"Fetching professionals for service_id: {service_id}")  # Debugging
+
+            professionals = (
+                db.session.query(Professional, User, Service)
+                .join(User, Professional.p_userid == User.id)
+                .join(Service, Professional.p_serviceid == Service.service_id)
+                .filter(Professional.p_serviceid == service_id, Professional.p_active == True)
+                .all()
+            )
+
+            if not professionals:
+                print("No professionals found.")  # Debug print
+                return {"message": "No professionals found for this service."}, 404
+
+            result = []
+            for professional, user, service in professionals:
+                result.append({
+                    'p_id': professional.p_id,
+                    'p_name': professional.p_name,
+                    'p_serviceid': professional.p_serviceid,  # Include service ID
+                    'service_name': service.service_name,  # Include service name
+                    'p_experience': professional.p_experience,
+                    'p_pincode': professional.p_pincode,
+                    'p_phone': professional.p_phone,
+                    'user': {
+                        'id': user.id,
+                        'email': user.email,
+                        'active': user.active
+                    }
+                })
+            
+            print(f"Returning {len(result)} professionals.")  # Debug print
+            return jsonify(result)
+
+        except Exception as e:
+            print(f"Error: {str(e)}")  # Print full error
+            return {"message": "Internal Server Error"}, 500
+
+api.add_resource(ProfessionalsByServiceAPI, '/services/<int:service_id>/professionals')
+
+
+
+
+# BOOKSERVICE BOOKSERVICE BOOKSERVICE BOOKSERVICE BOOKSERVICE BOOKSERVICE BOOKSERVICE BOOKSERVICE BOOKSERVICE BOOKSERVICE BOOKSERVICE BOOKSERVICE
+
+class BookServiceAPI(Resource):
+    @auth_required('token')
+    def post(self):
+        data = request.get_json()
+
+        user_id = current_user.id
+
+        # Fetch the customer ID from the database
+        customer = Customer.query.filter_by(c_userid=user_id).first()
+
+        if not customer:
+            return {"message": "Customer profile not found"}, 400
+        
+        professional_id = data.get('professional_id')
+        service_id = data.get('service_id')
+
+        if not professional_id or not service_id:
+            return {"message": "Invalid booking request"}, 400
+
+        # Check if the professional exists
+        professional = Professional.query.filter_by(p_id=professional_id).first()
+        if not professional:
+            return {"message": "Professional not found"}, 404
+        
+        existing_request = ServiceRequest.query.filter_by(
+            sr_customerid=customer.c_id,
+            sr_professionalid=professional_id,
+            sr_serviceid=service_id
+        ).first()
+
+        if existing_request:
+            return {"message": "Service request already exists. You cannot rebook the same service."}, 400
+
+        # Create the service request
+        new_request = ServiceRequest(
+            sr_customerid=customer.c_id,
+            sr_professionalid=professional_id,
+            sr_serviceid=service_id,
+            sr_created_at=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            
+        )
+        db.session.add(new_request)
+        db.session.commit()
+
+        return {"message": "Service request created successfully"}, 201
+
+api.add_resource(BookServiceAPI, '/service/book')

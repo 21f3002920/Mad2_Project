@@ -1,5 +1,6 @@
 from flask import current_app as app
-from backend.models import db, Customer, Professional, Service
+from datetime import datetime
+from backend.models import db, Customer, Professional, Service, ServiceRequest
 from flask_security import SQLAlchemyUserDatastore, hash_password
 
 with app.app_context():
@@ -35,7 +36,7 @@ with app.app_context():
     db.session.add(new_customer)
     db.session.commit()
 
-    new_professional = Professional(
+    new_professional1 = Professional(
         p_userid=professional_user.id,
         p_serviceid=2,
         p_experience=3,
@@ -46,7 +47,35 @@ with app.app_context():
         p_phone=9887765544,
         p_pincode=560089
     )
-    db.session.add(new_professional)
+    db.session.add(new_professional1)
+    db.session.commit()
+
+    new_professional2 = Professional(
+        p_userid=professional_user.id,
+        p_serviceid=1,
+        p_experience=3,
+        p_flag=0,
+        p_name="Sakthivel A",
+        p_active=True,
+        p_aadhaarnumber="555555555555",
+        p_phone=9887765544,
+        p_pincode=560089
+    )
+    db.session.add(new_professional2)
+    db.session.commit()
+
+    new_professional3 = Professional(
+        p_userid=professional_user.id,
+        p_serviceid=3,
+        p_experience=3,
+        p_flag=0,
+        p_name="Shashank B S",
+        p_active=True,
+        p_aadhaarnumber="555555555555",
+        p_phone=9887765544,
+        p_pincode=560089
+    )
+    db.session.add(new_professional3)
     db.session.commit()
 
     new_service1 = Service(

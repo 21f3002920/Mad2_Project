@@ -66,7 +66,6 @@ export default {
         
                 const data = await res.json();
                 
-                // Ensure correct structure for each professional
                 this.professionals = data.map(professional => ({
                     p_id: professional.p_id,
                     p_name: professional.p_name,

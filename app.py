@@ -1,7 +1,7 @@
 from flask import Flask
 from flask_login import login_required
 from backend.config import LocalDevelopmentConfig
-from backend.models import db, User, Role
+from backend.models import db, User, Role, ServiceRequest, Service
 from flask_security import Security, SQLAlchemyUserDatastore, auth_required
 from backend.resources import api
 

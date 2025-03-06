@@ -46,12 +46,12 @@ def register():
     role = data.get('role')
 
     if not email or not password or role not in ['Customer', 'Professional']:
-        return jsonify({"message" : "invalid inputs"}), 404
+        return jsonify({"message" : "Invalid inputs"}), 404
     
     user = datastore.find_user(email = email)
 
     if user:
-        return jsonify({"message" : "user already exists"}), 404
+        return jsonify({"message" : "User already exists. Try using different credentials."}), 404
 
     try :
         if role == "Customer":
@@ -65,7 +65,6 @@ def register():
         if not user1:
             return jsonify({"message": "User creation failed"}), 500
 
-        # ✅ Fix: Create Customer or Professional
         if role == "Customer":
             customer = Customer(
                 c_userid=user1.id,
@@ -92,10 +91,10 @@ def register():
             db.session.add(professional)
             db.session.commit()
 
-        return jsonify({"message" : "success"}), 200
+        return jsonify({"message" : "User created Successfully"}), 200
     except:
         db.session.rollback()
-        return jsonify({"message" : "error creating user"}), 400
+        return jsonify({"message" : "Error creating User"}), 400
 
 @app.route('/public/services', methods=['GET'])
 def public_services():

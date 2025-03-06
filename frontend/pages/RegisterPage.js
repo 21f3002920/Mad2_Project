@@ -104,7 +104,8 @@ export default {
                     method : 'POST', 
                     headers: {'Content-Type' : 'application/json'}, 
                     body : JSON.stringify(userData)
-                })
+                });
+                const data= await res.json()
             if (res.ok){
                 alert('User registered Successfully.')
                 console.log('User registered Successfully')
@@ -121,7 +122,7 @@ export default {
                 }
             }
             else{
-                alert('Error registering user.')
+                alert(data.message)
                 console.log('Error registering user');
             }
         }

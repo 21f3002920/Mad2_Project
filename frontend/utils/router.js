@@ -24,9 +24,8 @@ import AdminDashboardCustomer from "../pages/ADMIN/AdminDashboardCustomer.js";
 import AdminDashboardProfessional from "../pages/ADMIN/AdminDashboardProfessional.js";
 import CustomerDashboard from "../pages/CUSTOMER/CustomerDashboard.js";
 import ProfessionalDashboard from "../pages/PROFESSIONAL/ProfessionalDashboard.js";
-import CustomerService from "../pages/CUSTOMER/CustomerService.js";
+import CustomerDashboardService from "../pages/CUSTOMER/CustomerDashboardService.js";
 import store from "./store.js";
-import CustomerDisplayService from "../pages/CUSTOMER/CustomerDisplayService.js";
 
 
 
@@ -38,10 +37,8 @@ const routes = [
     {path : '/AdmindashboardService', component : AdminDashboardService, meta : {requiresLogin : true, role : "Admin"}},
     {path : '/AdmindashboardCustomer', component : AdminDashboardCustomer, meta : {requiresLogin : true, role : "Admin"}},
     {path : '/AdmindashboardProfessional', component : AdminDashboardProfessional, meta : {requiresLogin : true, role : "Admin"}},
-    
     {path : '/Customerdashboard', component : CustomerDashboard, meta : {requiresLogin : true, role : "Customer"}},
-    {path : '/Customerdashboard/Service', component : CustomerService, meta : {requiresLogin : true, role : "Customer"}},
-    {path : '/Customerdashboard/Service/:id', component : CustomerDisplayService, props :true, meta : {requiresLogin : true, role : "Customer"}},
+    {path : '/CustomerdashboardService', component : CustomerDashboardService, meta : {requiresLogin : true, role : "Customer"}},
 
 
 

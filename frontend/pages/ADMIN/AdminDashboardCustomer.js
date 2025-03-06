@@ -39,7 +39,6 @@ export default {
         
                 const data = await res.json();
                 
-                // Ensure correct structure for each customer
                 this.customers = data.map(customer => ({
                     c_id: customer.c_id,
                     c_name: customer.c_name,

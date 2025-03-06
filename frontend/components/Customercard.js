@@ -3,6 +3,8 @@ export default {
     
     template: `
     <div class="jumbotron">
+    <div class="professional-card card">
+    <div class="card-body">
         <h2>{{ c_name }}</h2>
         <p>Email: {{ email }}</p>
         <p>Phone: {{ c_phone }}</p>
@@ -11,11 +13,13 @@ export default {
         <button class="logout" v-if="$store.state.role === 'Admin'" @click="toggleBlock">{{ active ? 'Block' : 'Unblock' }}</button>
         <button class="logout" v-if="$store.state.role === 'Admin'" @click="deleteCustomer">Delete</button>
     </div>
+    </div>
+    </div>
     `,
 
     methods: {
         async toggleBlock() {
-            const action = this.active ? 'block' : 'unblock'; // Determine action text
+            const action = this.active ? 'block' : 'unblock'; 
             if (!confirm(`Are you sure you want to ${action} ${this.c_name}?`)) return;
             const res = await fetch(`/api/customers/${this.c_id}`, {
                 method: 'PUT',
