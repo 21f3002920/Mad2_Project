@@ -5,6 +5,7 @@ export default {
     <div class="main-content">
         <h1>PROFESSIONAL MANAGEMENT</h1>
         <h2>--------------</h2>
+        <input type="text" v-model="searchQuery" placeholder="Search by name..." class="input-field" />
         <div class="d-flex flex-column gap-2">
         <button class="logout" v-if="!showBlocked" @click="toggleInactive">
             {{ showInactive ? "Show All Professionals" : "Show Pending Applicants" }}
@@ -40,18 +41,28 @@ export default {
             professionals: [],
             showInactive: false,
             showBlocked: false,
+            searchQuery: "",
         };
     },
     computed: {
         filteredProfessionals() {
+            let filtered = this.professionals;
+    
             if (this.showInactive) {
-                return this.professionals.filter(p => !p.p_active);
+                filtered = this.professionals.filter(p => !p.p_active); 
+            } else if (this.showBlocked) {
+                filtered = this.professionals.filter(p => !p.active && p.p_active); 
+            } else {
+                filtered = this.professionals.filter(p => p.p_active && p.active); 
             }
-            if (this.showBlocked) {
-                return this.professionals.filter(p => !p.active && p.p_active); 
+
+            if (this.searchQuery) {
+                filtered = filtered.filter(p =>
+                    p.p_name.toLowerCase().startsWith(this.searchQuery.toLowerCase())
+                );
             }
-            return this.professionals; 
-        
+    
+            return filtered;
         }
     },
     

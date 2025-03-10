@@ -187,6 +187,8 @@ class ProfessionalListAPI(Resource):
                 }
             })
         return jsonify(result)
+    
+api.add_resource(ProfessionalListAPI, '/professionals')
 
 class ProfessionalAPI(Resource):
     @auth_required('token')
@@ -222,8 +224,6 @@ class ProfessionalAPI(Resource):
             db.session.commit()
         return {"message": "Professional deleted"}   
     
-    
-api.add_resource(ProfessionalListAPI, '/professionals')
 api.add_resource(ProfessionalAPI, '/professionals/<int:p_id>')
 
 
@@ -256,6 +256,7 @@ class ProfessionalsByServiceAPI(Resource):
                     'p_serviceid': professional.p_serviceid, 
                     'service_name': service.service_name, 
                     'p_experience': professional.p_experience,
+                    'p_flag': professional.p_flag,
                     'p_pincode': professional.p_pincode,
                     'p_phone': professional.p_phone,
                     'user': {

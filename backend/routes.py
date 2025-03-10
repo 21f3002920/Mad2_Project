@@ -33,7 +33,18 @@ def login():
         return jsonify({'message' : "Incorect Email or Password. Please try again."}), 401
     
     if verify_password(password, user.password):
-        return jsonify({'token' : user.get_auth_token(), 'email' : user.email, 'role' : user.roles[0].name, 'active' : user.active})
+        customer = Customer.query.filter_by(c_userid=user.id).first()
+        professional = Professional.query.filter_by(p_userid=user.id).first()
+        name = customer.c_name if customer else (professional.p_name if professional else "User")
+
+        return jsonify({
+            'token': user.get_auth_token(),
+            'email': user.email,
+            'role': user.roles[0].name,
+            'active': user.active,
+            'id': user.id,
+            'name': name 
+        })
     
     return jsonify({'message' : "Incorect Email or Password. Please try again."}), 400
 

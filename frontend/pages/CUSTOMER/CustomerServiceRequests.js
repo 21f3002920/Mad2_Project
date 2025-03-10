@@ -54,7 +54,7 @@ export default {
         async closeServiceRequest(sr_id) {
             if (!confirm("Are you sure you want to CLOSE this Service Request?")) return;
         
-            const impressed = confirm("Were you impressed with the professional's behavior? Click 'OK' for Yes, 'Cancel' for No.");
+            const impressed = confirm("Was the Professional's quality of work satisfactory? Click 'OK' for Yes, 'Cancel' for No.");
         
             try {
                 const res = await fetch(`/api/service_requests/${sr_id}/close`, {

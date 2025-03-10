@@ -17,8 +17,8 @@ export default{
             {{ showProfessionals ? 'Hide Professionals' : 'Available Professionals' }}
         </button>        
         <div v-if="showProfessionals">
-            <div class="table">
-                <Professionalcard v-for="professional in professionals"
+        <input type="text" v-model="searchQuery" placeholder="Search by name or pincode" class="input-field" />
+                <Professionalcard v-for="professional in filteredProfessionals"
                     :p_id="professional.p_id"
                     :p_name="professional.p_name"
                     :p_userid="professional.p_userid"
@@ -33,7 +33,6 @@ export default{
                     :email="professional.user.email"
                     :active="professional.user.active">
                 </Professionalcard>
-            </div>
         </div>
         <div v-if="showEditing">
             <div class="input-field">
@@ -56,6 +55,7 @@ data() {
         showButton: true,
         showProfessionals: false,
         professionals: [],
+        searchQuery: "",
         updatedService: {
             service_name: this.service_name,
             service_baseprice: this.service_baseprice,
@@ -67,9 +67,9 @@ data() {
 
     methods:{
         async fetchProfessionals() {
-            this.showProfessionals = !this.showProfessionals; // Toggle visibility
+            this.showProfessionals = !this.showProfessionals; 
             
-            if (this.showProfessionals && this.professionals.length === 0) { // Fetch only once
+            if (this.showProfessionals && this.professionals.length === 0) { 
                 try {
                     const res = await fetch(`/api/services/${this.service_id}/professionals`, {
                         headers: {
@@ -83,7 +83,9 @@ data() {
                         throw new Error(errorData.message || "Failed to fetch professionals");
                     }
             
-                    this.professionals = await res.json();
+                    let professionalsData = await res.json();
+                    professionalsData.sort((a, b) => a.p_flag - b.p_flag);
+                    this.professionals = professionalsData;
                 } catch (error) {
                     console.error("Error fetching professionals:", error);
                     alert(error.message);
@@ -136,6 +138,17 @@ data() {
             else {
                 this.$router.push(`/Customerdashboard/Service/${this.service_id}`);
             }
+        }
+    },
+    computed: {
+        filteredProfessionals() {
+            if (!this.searchQuery) return this.professionals;
+            const query = this.searchQuery.toLowerCase();
+    
+            return this.professionals.filter(professional =>
+                professional.p_name.toLowerCase().startsWith(query) || 
+                professional.p_pincode.toString().startsWith(query)
+            );
         }
     },
     components: {
