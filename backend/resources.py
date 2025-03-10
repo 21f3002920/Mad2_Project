@@ -31,7 +31,7 @@ user_fields = {
 }
 
 
-# SERVICES SERVICES SERVICES SERVICES SERVICES SERVICES SERVICES SERVICES SERVICES SERVICES SERVICES SERVICES SERVICES
+# SERVICES DATA
 
 class ServiceAPI(Resource):
     @marshal_with(service_fields)
@@ -99,7 +99,7 @@ api.add_resource(ServiceAPI, '/services/<int:service_id>')
 api.add_resource(ServiceListAPI, '/services')
 
 
-# CUSTOMERS CUSTOMERS CUSTOMERS CUSTOMERS CUSTOMERS CUSTOMERS CUSTOMERS CUSTOMERS CUSTOMERS CUSTOMERS CUSTOMERS CUSTOMERS CUSTOMERS CUSTOMERS
+# CUSTOMERS DATA
 
 class CustomerListAPI(Resource):
     @auth_required('token')
@@ -160,7 +160,7 @@ api.add_resource(CustomerListAPI, '/customers')
 api.add_resource(CustomerAPI, '/customers/<int:c_id>')
 
 
-# PROFESSIONALS PROFESSIONALS PROFESSIONALS PROFESSIONALS PROFESSIONALS PROFESSIONALS PROFESSIONALS PROFESSIONALS PROFESSIONALS PROFESSIONALS PROFESSIONALS
+# PROFESSIONALS DATA
 
 class ProfessionalListAPI(Resource):
     @auth_required('token')
@@ -227,14 +227,14 @@ api.add_resource(ProfessionalListAPI, '/professionals')
 api.add_resource(ProfessionalAPI, '/professionals/<int:p_id>')
 
 
-# SERVICERQUEST SERVICERQUEST SERVICERQUEST SERVICERQUEST SERVICERQUEST SERVICERQUEST SERVICERQUEST SERVICERQUEST SERVICERQUEST SERVICERQUEST SERVICERQUEST
+# DATA OF PROFESSIONALS TO GIVEN SERVICE
 
 class ProfessionalsByServiceAPI(Resource):
     @auth_required('token')
     def get(self, service_id):
         try:
-            service_id = int(service_id)  # Ensure it's an integer
-            print(f"Fetching professionals for service_id: {service_id}")  # Debugging
+            service_id = int(service_id)  
+            print(f"Fetching professionals for service_id: {service_id}") 
 
             professionals = (
                 db.session.query(Professional, User, Service)
@@ -245,7 +245,7 @@ class ProfessionalsByServiceAPI(Resource):
             )
 
             if not professionals:
-                print("No professionals found.")  # Debug print
+                print("No professionals found.") 
                 return {"message": "No professionals found for this service."}, 404
 
             result = []
@@ -253,8 +253,8 @@ class ProfessionalsByServiceAPI(Resource):
                 result.append({
                     'p_id': professional.p_id,
                     'p_name': professional.p_name,
-                    'p_serviceid': professional.p_serviceid,  # Include service ID
-                    'service_name': service.service_name,  # Include service name
+                    'p_serviceid': professional.p_serviceid, 
+                    'service_name': service.service_name, 
                     'p_experience': professional.p_experience,
                     'p_pincode': professional.p_pincode,
                     'p_phone': professional.p_phone,
@@ -265,19 +265,17 @@ class ProfessionalsByServiceAPI(Resource):
                     }
                 })
             
-            print(f"Returning {len(result)} professionals.")  # Debug print
+            print(f"Returning {len(result)} professionals.")  
             return jsonify(result)
 
         except Exception as e:
-            print(f"Error: {str(e)}")  # Print full error
+            print(f"Error: {str(e)}")  
             return {"message": "Internal Server Error"}, 500
 
 api.add_resource(ProfessionalsByServiceAPI, '/services/<int:service_id>/professionals')
 
 
-
-
-# BOOKSERVICE BOOKSERVICE BOOKSERVICE BOOKSERVICE BOOKSERVICE BOOKSERVICE BOOKSERVICE BOOKSERVICE BOOKSERVICE BOOKSERVICE BOOKSERVICE BOOKSERVICE
+# BOOKING OF SERVICE BY CUSTOMER
 
 class BookServiceAPI(Resource):
     @auth_required('token')
@@ -286,7 +284,6 @@ class BookServiceAPI(Resource):
 
         user_id = current_user.id
 
-        # Fetch the customer ID from the database
         customer = Customer.query.filter_by(c_userid=user_id).first()
 
         if not customer:
@@ -298,7 +295,6 @@ class BookServiceAPI(Resource):
         if not professional_id or not service_id:
             return {"message": "Invalid booking request"}, 400
 
-        # Check if the professional exists
         professional = Professional.query.filter_by(p_id=professional_id).first()
         if not professional:
             return {"message": "Professional not found"}, 404
@@ -307,12 +303,11 @@ class BookServiceAPI(Resource):
             sr_customerid=customer.c_id,
             sr_professionalid=professional_id,
             sr_serviceid=service_id
-        ).first()
+        ).filter(ServiceRequest.sr_status.in_(["Requested", "Accepted", "Closed by Customer", "Closed by Professional"])).first()
 
         if existing_request:
-            return {"message": "Service request already exists. You cannot rebook the same service."}, 400
+            return {"message": "You already have an active service request with this professional. Please wait until it is completed before booking again."}, 400
 
-        # Create the service request
         new_request = ServiceRequest(
             sr_customerid=customer.c_id,
             sr_professionalid=professional_id,
@@ -326,3 +321,210 @@ class BookServiceAPI(Resource):
         return {"message": "Service request created successfully"}, 201
 
 api.add_resource(BookServiceAPI, '/service/book')
+
+
+# SERVICE REQUEST DATA FOR CUSTOMERS
+
+class ServiceRequestsForCustomerAPI(Resource):
+    @auth_required('token')
+    def get(self):
+        try:
+            customer = Customer.query.filter_by(c_userid=current_user.id).first()
+            if not customer:
+                return {"message": "Customer profile not found"}, 400
+            
+            status_filter = request.args.get("status", "Requested,Accepted,Closed,Rejected,").split(",")
+
+            service_requests = (
+                db.session.query(ServiceRequest, Professional, Service)
+                .join(Professional, ServiceRequest.sr_professionalid == Professional.p_id)
+                .join(Service, ServiceRequest.sr_serviceid == Service.service_id)
+                .filter(ServiceRequest.sr_customerid == customer.c_id)
+                .filter(ServiceRequest.sr_status.in_(status_filter)) 
+                .all()
+            )
+
+            result = []
+            for sr, professional, service in service_requests:
+                result.append({
+                    'sr_id': sr.sr_id,
+                    'service_name': service.service_name,
+                    'professional_name': professional.p_name,
+                    'professional_experience': professional.p_experience,
+                    'professional_pincode': professional.p_pincode,
+                    'professional_phone': professional.p_phone,
+                    'sr_created_at': sr.sr_created_at if isinstance(sr.sr_created_at, str) else (sr.sr_created_at.strftime("%Y-%m-%d %H:%M:%S") if sr.sr_created_at else "N/A"),
+                    'sr_closed_at': sr.sr_closed_at if isinstance(sr.sr_closed_at, str) else (sr.sr_closed_at.strftime("%Y-%m-%d %H:%M:%S") if sr.sr_closed_at else "N/A"),
+                    'status': sr.sr_status
+                })
+
+            return jsonify(result)
+
+        except Exception as e:
+            print(f"🔥 ERROR in ServiceRequestsForCustomerAPI: {str(e)}")
+            return {"message": "Internal Server Error", "error": str(e)}, 500
+
+api.add_resource(ServiceRequestsForCustomerAPI, '/customer/service_requests')
+
+
+# SERVICE REQUEST DATA FOR PROFESSIONALS
+
+class ServiceRequestsForProfessionalAPI(Resource):
+    @auth_required('token')
+    def get(self):
+        professional = Professional.query.filter_by(p_userid=current_user.id).first()
+        if not professional:
+            return {"message": "Professional profile not found"}, 400
+
+        status_filter = request.args.get("status", "Requested, Accepted, Closed, Rejected").split(",")
+
+        service_requests = (
+            db.session.query(ServiceRequest, Customer, Service)
+            .join(Customer, ServiceRequest.sr_customerid == Customer.c_id)
+            .join(Service, ServiceRequest.sr_serviceid == Service.service_id)
+            .filter(ServiceRequest.sr_professionalid == professional.p_id)
+            .filter(ServiceRequest.sr_status.in_(status_filter))  
+            .all()
+        )
+
+        result = []
+        for sr, customer, service in service_requests:
+            result.append({
+                'sr_id': sr.sr_id,
+                'customer_name': customer.c_name,
+                'customer_address': customer.c_address,
+                'customer_phone': customer.c_phone,
+                'sr_created_at': sr.sr_created_at,
+                'sr_closed_at': sr.sr_closed_at,  
+                'service_name': service.service_name,
+                'status': sr.sr_status
+            })
+
+        return jsonify(result)
+
+api.add_resource(ServiceRequestsForProfessionalAPI, '/professional/service_requests')
+
+
+# ACCEPTING OR REJECTING SERVICE REQUEST
+
+class UpdateServiceRequestStatusAPI(Resource):
+    @auth_required('token')
+    def put(self, sr_id):
+        professional = Professional.query.filter_by(p_userid=current_user.id).first()
+        if not professional:
+            return {"message": "Unauthorized"}, 403
+
+        service_request = ServiceRequest.query.get(sr_id)
+        if not service_request or service_request.sr_professionalid != professional.p_id:
+            return {"message": "Service request not found"}, 404
+        
+        data = request.get_json()
+        new_status = data.get('status')
+
+        if new_status not in ["Accepted", "Rejected"]:
+            return {"message": "Invalid status update"}, 400
+
+        service_request.sr_status = new_status
+        if new_status == "Rejected":
+            service_request.sr_closed_at = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+        db.session.commit()
+        return {"message": f"Service request {new_status.lower()} successfully"}
+
+api.add_resource(UpdateServiceRequestStatusAPI, '/service_requests/<int:sr_id>/status')
+
+
+# CLOSE SERVICE REQUEST BY CUSTOMER
+
+class CloseServiceRequestAPI(Resource):
+    @auth_required('token')
+    def put(self, sr_id):
+        customer = Customer.query.filter_by(c_userid=current_user.id).first()
+        if not customer:
+            return {"message": "Unauthorized"}, 403
+
+        service_request = ServiceRequest.query.get(sr_id)
+        if not service_request or service_request.sr_customerid != customer.c_id:
+            return {"message": "Service request not found"}, 404
+
+        if service_request.sr_status != "Accepted" and service_request.sr_status != "Closed by Professional":
+            return {"message": "Only accepted or closed-by-professional requests can be closed"}, 400
+
+        data = request.get_json()
+        impressed = data.get("impressed", True)  
+
+        professional = Professional.query.get(service_request.sr_professionalid)
+
+        if not impressed and professional:
+            professional.p_flag += 1
+
+        new_status = "Closed" if service_request.sr_status == "Closed by Professional" else "Closed by Customer"
+
+        service_request.sr_status = new_status
+        service_request.sr_closed_at = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+        db.session.commit()
+        return {"message": f"Service request marked as {new_status} successfully."}
+
+
+api.add_resource(CloseServiceRequestAPI, '/service_requests/<int:sr_id>/close')
+
+
+# CLOSE SERVICE REQUEST BY PROFESSIONAL
+
+class CloseServiceRequestByProfessionalAPI(Resource):
+    @auth_required('token')
+    def put(self, sr_id):
+        professional = Professional.query.filter_by(p_userid=current_user.id).first()
+        if not professional:
+            return {"message": "Unauthorized"}, 403
+
+        service_request = ServiceRequest.query.get(sr_id)
+        if not service_request or service_request.sr_professionalid != professional.p_id:
+            return {"message": "Service request not found"}, 404
+
+        if service_request.sr_status not in ["Accepted", "Closed by Customer"]:
+            return {"message": "Only accepted or closed-by-customer requests can be closed"}, 400
+
+        data = request.get_json()
+        impressed = data.get("impressed", True) 
+
+        customer = Customer.query.get(service_request.sr_customerid)
+        
+        if not impressed and customer:
+            customer.c_flag += 1
+
+        new_status = "Closed by Professional" if service_request.sr_status == "Accepted" else "Closed"
+        
+        service_request.sr_status = new_status
+        service_request.sr_closed_at = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+        db.session.commit()
+        return {"message": f"Service request marked as {new_status} successfully."}
+
+
+api.add_resource(CloseServiceRequestByProfessionalAPI, '/service_requests/<int:sr_id>/close_by_professional')
+
+
+# DELETE/CANCEL SERVICE REQUEST
+
+class DeleteServiceRequestAPI(Resource):
+    @auth_required('token')
+    def delete(self, sr_id):
+        customer = Customer.query.filter_by(c_userid=current_user.id).first()
+        if not customer:
+            return {"message": "Unauthorized"}, 403
+
+        service_request = ServiceRequest.query.get(sr_id)
+        if not service_request or service_request.sr_customerid != customer.c_id:
+            return {"message": "Service request not found"}, 404
+        
+        if service_request.sr_status != "Requested":
+            return {"message": "Only requested service requests can be canceled"}, 400
+
+        db.session.delete(service_request)
+        db.session.commit()
+        
+        return {"message": "Service request canceled successfully"}
+
+api.add_resource(DeleteServiceRequestAPI, '/service_requests/<int:sr_id>')

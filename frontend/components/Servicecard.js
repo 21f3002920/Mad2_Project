@@ -17,34 +17,34 @@ export default{
             {{ showProfessionals ? 'Hide Professionals' : 'Available Professionals' }}
         </button>        
         <div v-if="showProfessionals">
-        <div class="table">
-            <Professionalcard v-for="professional in professionals"
-                :p_id="professional.p_id"
-                :p_name="professional.p_name"
-                :p_userid="professional.p_userid"
-                :p_serviceid="professional.p_serviceid"
-                :service_name="service_name"
-                :p_experience="professional.p_experience"
-                :p_flag="professional.p_flag"
-                :p_active="professional.p_active"
-                :p_pincode="professional.p_pincode"
-                :p_phone="professional.p_phone"
-                :p_aadhaarnumber="professional.p_aadhaarnumber"
-                :email="professional.user.email"
-                :active="professional.user.active">
-            </Professionalcard>
+            <div class="table">
+                <Professionalcard v-for="professional in professionals"
+                    :p_id="professional.p_id"
+                    :p_name="professional.p_name"
+                    :p_userid="professional.p_userid"
+                    :p_serviceid="professional.p_serviceid"
+                    :service_name="service_name"
+                    :p_experience="professional.p_experience"
+                    :p_flag="professional.p_flag"
+                    :p_active="professional.p_active"
+                    :p_pincode="professional.p_pincode"
+                    :p_phone="professional.p_phone"
+                    :p_aadhaarnumber="professional.p_aadhaarnumber"
+                    :email="professional.user.email"
+                    :active="professional.user.active">
+                </Professionalcard>
             </div>
         </div>
         <div v-if="showEditing">
-        <div class="input-field">
-            <input v-model="updatedService.service_name" placeholder="Service Name" />
-            <input v-model="updatedService.service_baseprice" type="number" placeholder="Base Price" />
-            <input v-model="updatedService.service_time" type="number" placeholder="Estimated Time (mins)" />
-            <input v-model="updatedService.service_description" placeholder="Description"></input>
-            <h1></h1> 
-            <button class="logout" @click="updateService">Save Changes</button>
-            <button class="logout" @click="showEditing = false, showButton= true">Cancel</button>
-        </div>
+            <div class="input-field">
+                <input v-model="updatedService.service_name" placeholder="Service Name" />
+                <input v-model="updatedService.service_baseprice" type="number" placeholder="Base Price" />
+                <input v-model="updatedService.service_time" type="number" placeholder="Estimated Time (mins)" />
+                <input v-model="updatedService.service_description" placeholder="Description"></input>
+                <h1></h1> 
+                <button class="logout" @click="updateService">Save Changes</button>
+                <button class="logout" @click="showEditing = false, showButton= true">Cancel</button>
+            </div>
         </div>
     </div>
     </div>
@@ -110,7 +110,7 @@ data() {
             }
         },
         async deleteService(){
-            if (!confirm(`Are you sure you want to delete ${this.service_name}?`)){ 
+            if (!confirm(`Are you sure you want to DELETE ${this.service_name}?`)){ 
                 return
             };
             const res = await fetch(`/api/services/${this.service_id}`, {

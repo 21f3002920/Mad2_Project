@@ -20,7 +20,7 @@ export default {
     methods: {
         async toggleBlock() {
             const action = this.active ? 'block' : 'unblock'; 
-            if (!confirm(`Are you sure you want to ${action} ${this.c_name}?`)) return;
+            if (!confirm(`Are you sure you want to ${action.toUpperCase()} ${this.c_name}?`)) return;
             const res = await fetch(`/api/customers/${this.c_id}`, {
                 method: 'PUT',
                 headers: {
@@ -33,9 +33,8 @@ export default {
                 alert('Failed to update customer status.');
             }
         },
-
         async deleteCustomer() {
-            if (!confirm(`Are you sure you want to delete ${this.c_name}?`)) return;
+            if (!confirm(`Are you sure you want to DELETE ${this.c_name}?`)) return;
             const res = await fetch(`/api/customers/${this.c_id}`, {
                 method: 'DELETE',
                 headers: {

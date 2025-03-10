@@ -19,11 +19,11 @@ export default {
         <p v-if="$store.state.role === 'Customer'">Service Offered: {{ service_name }}</p>
         <p v-if="!p_active && $store.state.role === 'Customer'">Experience: {{ p_experience }} Years</p>
         <p v-if="!p_active && $store.state.role === 'Customer'">Pincode: {{ p_pincode }}</p>
-        <button class="logout" v-if="p_active && $store.state.role === 'Admin'" @click="toggleBlock">{{ active ? 'Block' : 'Unblock' }}</button>
-        <button class="logout" v-if="p_active && $store.state.role === 'Admin'" @click="deleteProfessional">Delete</button>
-        <button class="logout" v-if="!p_active && $store.state.role === 'Admin'" @click="acceptProfessional">Accept</button>
-        <button class="logout" v-if="!p_active && $store.state.role === 'Admin'" @click="rejectProfessional">Reject</button>
-        <button class="logout" v-if="$store.state.role === 'Customer'" @click="bookService">Book Now</button>
+            <button class="logout" v-if="p_active && $store.state.role === 'Admin'" @click="toggleBlock">{{ active ? 'Block' : 'Unblock' }}</button>
+            <button class="logout" v-if="p_active && $store.state.role === 'Admin'" @click="deleteProfessional">Delete</button>
+            <button class="logout" v-if="!p_active && $store.state.role === 'Admin'" @click="acceptProfessional">Accept</button>
+            <button class="logout" v-if="!p_active && $store.state.role === 'Admin'" @click="rejectProfessional">Reject</button>
+            <button class="logout" v-if="$store.state.role === 'Customer'" @click="bookService">Book Now</button>
 
     </div>
     </div>
@@ -33,7 +33,7 @@ export default {
     methods: {
         async toggleBlock() {
             const action = this.active ? 'block' : 'unblock'; 
-            if (!confirm(`Are you sure you want to ${action} ${this.p_name}?`)) return;
+            if (!confirm(`Are you sure you want to ${action.toUpperCase()} ${this.p_name}?`)) return;
             const res = await fetch(`/api/professionals/${this.p_id}`, {
                 method: 'PUT',
                 headers: {
@@ -47,7 +47,7 @@ export default {
             }
         },
         async acceptProfessional() {
-            if (!confirm(`Are you sure you want to accept ${this.p_name}?`)) return;
+            if (!confirm(`Are you sure you want to ACCEPT ${this.p_name}?`)) return;
             const res = await fetch(`/api/professionals/${this.p_id}`, {
                 method: 'PUT',
                 headers: {
@@ -61,7 +61,7 @@ export default {
             }
         },
         async deleteProfessional() {
-            if (!confirm(`Are you sure you want to delete ${this.p_name}?`)) return;
+            if (!confirm(`Are you sure you want to DELETE ${this.p_name}?`)) return;
             const res = await fetch(`/api/professionals/${this.p_id}`, {
                 method: 'DELETE',
                 headers: {
@@ -75,7 +75,7 @@ export default {
             }
         },
         async rejectProfessional() {
-            if (!confirm(`Are you sure you want to reject ${this.p_name}?`)) return;
+            if (!confirm(`Are you sure you want to REJECT ${this.p_name}?`)) return;
             const res = await fetch(`/api/professionals/${this.p_id}`, {
                 method: 'DELETE',
                 headers: {
@@ -89,7 +89,7 @@ export default {
             }
         },
         async bookService() {
-            if (!confirm(`Are you sure you want to book ${this.p_name}?`)) return;
+            if (!confirm(`Are you sure you want to BOOK ${this.p_name}?`)) return;
         
             console.log("Booking service for:", { 
                 professional_id: this.p_id, 

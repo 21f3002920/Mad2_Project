@@ -23,8 +23,12 @@ import AdminDashboardService from "../pages/ADMIN/AdminDashboardService.js";
 import AdminDashboardCustomer from "../pages/ADMIN/AdminDashboardCustomer.js";
 import AdminDashboardProfessional from "../pages/ADMIN/AdminDashboardProfessional.js";
 import CustomerDashboard from "../pages/CUSTOMER/CustomerDashboard.js";
-import ProfessionalDashboard from "../pages/PROFESSIONAL/ProfessionalDashboard.js";
 import CustomerDashboardService from "../pages/CUSTOMER/CustomerDashboardService.js";
+import CustomerServiceRequests from "../pages/CUSTOMER/CustomerServiceRequests.js";
+import CustomerDashboardHistory from "../pages/CUSTOMER/CustomerDashboardHistory.js";
+import ProfessionalDashboard from "../pages/PROFESSIONAL/ProfessionalDashboard.js";
+import ProfessionalDashboardService from "../pages/PROFESSIONAL/ProfessionalDashboardService.js"
+import ProfessionalDashboardHistory from "../pages/PROFESSIONAL/ProfessionalDashboardHistory.js";
 import store from "./store.js";
 
 
@@ -39,14 +43,11 @@ const routes = [
     {path : '/AdmindashboardProfessional', component : AdminDashboardProfessional, meta : {requiresLogin : true, role : "Admin"}},
     {path : '/Customerdashboard', component : CustomerDashboard, meta : {requiresLogin : true, role : "Customer"}},
     {path : '/CustomerdashboardService', component : CustomerDashboardService, meta : {requiresLogin : true, role : "Customer"}},
-
-
-
-
-
-
-
+    {path : '/CustomerdashboardServiceRequests', component : CustomerServiceRequests, meta : {requiresLogin : true, role : "Customer"}},
+    {path : '/CustomerdashboardHistory', component : CustomerDashboardHistory, meta : {requiresLogin : true, role : "Customer"}},
     {path : '/Professionaldashboard', component : ProfessionalDashboard, meta : {requiresLogin : true, role : "Professional"}},
+    {path : '/ProfessionaldashboardService', component : ProfessionalDashboardService, meta : {requiresLogin : true, role : "Professional"}},
+    {path : '/ProfessionaldashboardHistory', component : ProfessionalDashboardHistory, meta : {requiresLogin : true, role : "Professional"}},
 ]
 
 const router = new VueRouter({

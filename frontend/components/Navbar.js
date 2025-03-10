@@ -21,8 +21,9 @@ export default {
             else{
                 return("/")
             }
-    
-  }}};
+        }
+    }
+};
   
     
 

@@ -4,10 +4,6 @@ export default {
     template : `
     <div class="main-content1">
         <h1>Available Services</h1>
-        <h2>--------------</h2> 
-        <button class="logout" v-if="$store.state.role === 'Customer'" @click="showForm = !showForm">
-            {{ showForm ? 'Cancel' : 'Requested Services' }}
-        </button>
         <h2>--------------</h2>  
         <Servicecard v-for="service in services" 
         :service_id="service.service_id" 

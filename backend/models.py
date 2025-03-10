@@ -61,9 +61,9 @@ class ServiceRequest(db.Model):
     sr_customerid = db.Column(db.Integer, db.ForeignKey('customer.c_id'), nullable=False)
     sr_professionalid = db.Column(db.Integer, db.ForeignKey('professional.p_id'), nullable=False)
     sr_serviceid = db.Column(db.Integer, db.ForeignKey('service.service_id'), nullable=False)
-    sr_status = db.Column(db.String(20), default="Pending")
+    sr_status = db.Column(db.String(20), default="Requested")
     sr_created_at = db.Column(db.String, nullable=False)
-    sr_closed_at = db.Column(db.String, nullable=True)
+    sr_closed_at = db.Column(db.String, default="-")
 
 
 

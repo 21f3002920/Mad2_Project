@@ -12,19 +12,18 @@ with app.app_context():
     userdatastore.find_or_create_role(name = 'Customer', description = 'general user')
     userdatastore.find_or_create_role(name = 'Professional', description = 'general user')
 
-    if (not userdatastore.find_user(email = 'admin@study.iitm.ac.in')):
-        userdatastore.create_user(email = 'admin@study.iitm.ac.in', password = hash_password('pass'), roles = ['Admin'] )
-    if (not userdatastore.find_user(email = 'user01@study.iitm.ac.in')):
-        userdatastore.create_user(email = 'user01@study.iitm.ac.in', password = hash_password('pass'), roles = ['Customer'] )
-    if (not userdatastore.find_user(email = 'user02@study.iitm.ac.in')):
-        userdatastore.create_user(email = 'user02@study.iitm.ac.in', password = hash_password('pass'), roles = ['Professional'] ) # for testing
+    if (not userdatastore.find_user(email = 'a')):
+        userdatastore.create_user(email = 'a', password = hash_password('a'), roles = ['Admin'] )
+    if (not userdatastore.find_user(email = 'c')):
+        userdatastore.create_user(email = 'c', password = hash_password('c'), roles = ['Customer'] )
+    if (not userdatastore.find_user(email = 'p')):
+        userdatastore.create_user(email = 'p', password = hash_password('p'), roles = ['Professional'] ) # for testing
 
     db.session.commit()
 
-    customer_user = userdatastore.find_user(email='user01@study.iitm.ac.in')
-    professional_user = userdatastore.find_user(email='user02@study.iitm.ac.in')
+    customer_user = userdatastore.find_user(email='c')
+    professional_user = userdatastore.find_user(email='p')
 
-    # Insert Initial Customer Data
     new_customer = Customer(
         c_name="Rishab R",
         c_userid=customer_user.id,
@@ -50,33 +49,6 @@ with app.app_context():
     db.session.add(new_professional1)
     db.session.commit()
 
-    new_professional2 = Professional(
-        p_userid=professional_user.id,
-        p_serviceid=1,
-        p_experience=3,
-        p_flag=0,
-        p_name="Sakthivel A",
-        p_active=True,
-        p_aadhaarnumber="555555555555",
-        p_phone=9887765544,
-        p_pincode=560089
-    )
-    db.session.add(new_professional2)
-    db.session.commit()
-
-    new_professional3 = Professional(
-        p_userid=professional_user.id,
-        p_serviceid=3,
-        p_experience=3,
-        p_flag=0,
-        p_name="Shashank B S",
-        p_active=True,
-        p_aadhaarnumber="555555555555",
-        p_phone=9887765544,
-        p_pincode=560089
-    )
-    db.session.add(new_professional3)
-    db.session.commit()
 
     new_service1 = Service(
         service_name="Haircut for Men",

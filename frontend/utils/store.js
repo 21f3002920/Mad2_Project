@@ -29,10 +29,10 @@ const store=new Vuex.Store({
             state.user_id=null;
             localStorage.removeItem('user');
         }
-
     },
     actions:{
     }
 })
+
 store.commit('setUser')
 export default store;

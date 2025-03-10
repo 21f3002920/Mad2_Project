@@ -9,7 +9,10 @@ export default {
             <router-link to="/CustomerdashboardService" class="navbarcentre">Search New Service</router-link>
         </div>
         <div class="button">
-            <router-link to="/Admindashboard/Service" class="navbarcentre">Close Service Request</router-link>
+            <router-link to="CustomerdashboardServiceRequests" class="navbarcentre">My Service Requests</router-link>
+        </div>
+        <div class="button">
+            <router-link to="/CustomerDashboardHistory" class="navbarcentre">Service History</router-link>
         </div>
         
     </div>

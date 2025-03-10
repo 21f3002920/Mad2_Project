@@ -3,8 +3,6 @@ import Footer from "./components/Footer.js"
 import router from "./utils/router.js"
 import store from "./utils/store.js"
 
-
-
 const app=new Vue ({
     el : '#app',
     template : `
@@ -14,7 +12,6 @@ const app=new Vue ({
             <Footer />
         </div>
     `,
-    
     components : {
         Navbar,
         Footer
