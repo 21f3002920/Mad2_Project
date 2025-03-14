@@ -6,6 +6,7 @@ export default {
         <button class="logout" v-if="$store.state.loggedIn" @click="$store.commit('logout'),$router.push('/')">Logout</button>
     </div>
     `,
+    
     computed:{
         goBackPath(){
             if (this.$store.state.role === "Admin") {

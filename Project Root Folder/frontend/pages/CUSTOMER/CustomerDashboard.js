@@ -1,7 +1,6 @@
 export default {
     template:`
     <div class="main-content">
-            
     <h1>CUSTOMER</h1> 
     <h2>Dashboard</h2> 
     <h2>--------------</h2> 

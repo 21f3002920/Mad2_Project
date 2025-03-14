@@ -3,7 +3,7 @@ import Servicecard from "../../components/Servicecard.js"
 export default {
 
     template : `
-    <div class="main-content">
+    <div class="main-content1">
     <h1>SERVICE</h1> 
     <h2>Management</h2> 
     <h2>--------------</h2>  
@@ -91,7 +91,6 @@ export default {
             }
             await this.fetchServices();
         }
-       
     },
     async mounted() {
         await this.fetchServices();

@@ -14,17 +14,19 @@ class User(db.Model,UserMixin):
     active=db.Column(db.Boolean, default=True)
     roles=db.Relationship('Role', backref='bearers', secondary='user_roles')
 
-    
+#Database Schema for Roles  
 class Role(db.Model,RoleMixin):
     id=db.Column(db.Integer, primary_key=True)
     name=db.Column(db.String, unique=True, nullable=False)
     description=db.Column(db.String, nullable=False)
 
+#Database Schema for relation between User and their respective Roles
 class UserRoles(db.Model):
     id=db.Column(db.Integer, primary_key=True)
     user_id=db.Column(db.Integer, db.ForeignKey('user.id'))
     role_id=db.Column(db.Integer, db.ForeignKey('role.id'))
 
+#Database Schema for Services
 class Service(db.Model):
     __tablename__='service'
     service_id=db.Column(db.Integer, primary_key=True)
@@ -33,6 +35,7 @@ class Service(db.Model):
     service_time=db.Column(db.Integer, nullable=False)
     service_description=db.Column(db.String,nullable=False)
 
+#Database Schema for Customers Data
 class Customer(db.Model):
     __tablename__='customer'
     c_id=db.Column(db.Integer, primary_key=True)
@@ -43,6 +46,7 @@ class Customer(db.Model):
     c_pincode=db.Column(db.Integer, nullable=False)
     c_phone=db.Column(db.Integer, nullable=False)
 
+#Database Schema for Professionals Data
 class Professional(db.Model):
     __tablename__='professional'
     p_id = db.Column(db.Integer, primary_key=True)
@@ -55,7 +59,8 @@ class Professional(db.Model):
     p_pincode=db.Column(db.Integer, nullable=False)
     p_phone=db.Column(db.Integer, nullable=False)
     p_aadhaarnumber=db.Column(db.String, nullable=False)
-    
+
+#Database Schema for Service Requests  
 class ServiceRequest(db.Model):
     sr_id = db.Column(db.Integer, primary_key=True)
     sr_customerid = db.Column(db.Integer, db.ForeignKey('customer.c_id'), nullable=False)
@@ -64,10 +69,3 @@ class ServiceRequest(db.Model):
     sr_status = db.Column(db.String(20), default="Requested")
     sr_created_at = db.Column(db.String, nullable=False)
     sr_closed_at = db.Column(db.String, default="-")
-
-
-
-    
-
-
-

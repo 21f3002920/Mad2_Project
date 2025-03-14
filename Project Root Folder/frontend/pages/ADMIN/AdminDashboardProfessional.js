@@ -2,7 +2,7 @@ import Professionalcard from "../../components/Professionalcard.js";
 
 export default {
     template: `
-    <div class="main-content">
+    <div class="main-content1">
         <h1>PROFESSIONAL MANAGEMENT</h1>
         <h2>--------------</h2>
         <input type="text" v-model="searchQuery" placeholder="Search by name..." class="input-field" />
@@ -32,7 +32,6 @@ export default {
             @professionalDeleted="removeProfessional"
             @professionalUpdated="updateProfessional">
         </Professionalcard>
-
     </div>
     `,
     
@@ -44,6 +43,7 @@ export default {
             searchQuery: "",
         };
     },
+    
     computed: {
         filteredProfessionals() {
             let filtered = this.professionals;

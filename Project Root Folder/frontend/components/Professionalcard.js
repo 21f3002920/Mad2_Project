@@ -4,7 +4,7 @@ export default {
     template: `
     <div class="jumbotron">
     <div class="professional-card card">
-    <div class="card-body">
+        <div class="card-body">
         <h2 v-if="$store.state.role === 'Admin'">{{ p_name }}</h2>
         <p v-if="$store.state.role === 'Admin'">Email: {{ email }}</p>
         <p v-if="$store.state.role === 'Admin'">Phone: {{ p_phone }}</p>
@@ -24,8 +24,7 @@ export default {
             <button class="logout" v-if="!p_active && $store.state.role === 'Admin'" @click="acceptProfessional">Accept</button>
             <button class="logout" v-if="!p_active && $store.state.role === 'Admin'" @click="rejectProfessional">Reject</button>
             <button class="logout" v-if="$store.state.role === 'Customer'" @click="bookService">Book Now</button>
-
-    </div>
+        </div>
     </div>
     </div>
     `,

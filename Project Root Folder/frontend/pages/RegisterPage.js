@@ -36,6 +36,7 @@ export default {
     </div>
     </div>
     `,
+
     data(){
         return {
             email :null,
@@ -56,6 +57,7 @@ export default {
             p_aadhaarnumber: null
         } 
     },
+    
     methods : {
         async fetchServices() {
             try {

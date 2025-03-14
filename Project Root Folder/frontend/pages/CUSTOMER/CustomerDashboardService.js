@@ -15,6 +15,7 @@ export default {
         ></Servicecard>
     </div>
     `, 
+
     data(){
         return{
             services:[],
@@ -22,6 +23,7 @@ export default {
             searchQuery: ""
         }
     },
+
     computed: {
         filteredServices() {
             if (!this.searchQuery) return this.services;
@@ -30,6 +32,7 @@ export default {
             );
         }
     },
+
     async mounted(){
         const res = await fetch(location.origin + '/api/services', {
         headers:{
@@ -38,6 +41,7 @@ export default {
     })
     this.services=await res.json()
 },
+
 components:{
     Servicecard,
 }

@@ -5,6 +5,7 @@ export default {
         handleAction: Function,
         showActions: { type: Boolean, default: true }
     },
+    
     template: `
         <div>
             <div class="table">

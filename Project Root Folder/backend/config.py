@@ -1,3 +1,4 @@
+#Configuration
 class Config():
     DEBUG=False
     SQL_ALCHEMY_TRACK_MODIFICATIONS=False
@@ -9,4 +10,10 @@ class LocalDevelopmentConfig(Config):
     SECURITY_PASSWORD_SALT='RishabR'
     SECRET_KEY="RISHABIITM"
     SECURITY_TOKEN_AUTHENTICATION_HEADER='Authentication-Token'
+    #Cache specific
+    CACHE_TYPE="RedisCache"
+    CACHE_DEFAULT_TIMEOUT=30
+    CACHE_REDIS_PORT=6379
     WTF_CSRF_ENABLED=False
+
+

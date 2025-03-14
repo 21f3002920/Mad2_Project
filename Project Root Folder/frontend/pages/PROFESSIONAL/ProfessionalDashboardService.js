@@ -3,7 +3,7 @@ import ServiceRequest from "../../components/ServiceRequest.js";
 export default {
     components: { ServiceRequest },
     template: `
-    <div class="main-content4">
+    <div class="main-content2">
         <ServiceRequest 
             :serviceRequests="serviceRequests" 
             role="Professional"
@@ -11,14 +11,17 @@ export default {
         />
         </div>
     `,
+
     data() {
         return {
             serviceRequests: []
         };
     },
+
     async mounted() {
         await this.fetchServiceRequests();
     },
+    
     methods: {
         async fetchServiceRequests() {
             try {

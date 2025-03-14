@@ -3,7 +3,7 @@ import ServiceRequest from "../../components/ServiceRequest.js";
 export default {
     components: { ServiceRequest },
     template: `
-    <div class="main-content4">
+    <div class="main-content2">
     <ServiceRequest 
         :serviceRequests="serviceRequests" 
         role="Customer"
@@ -11,14 +11,17 @@ export default {
     /> 
     </div>
     `,
+    
     data() {
         return {
             serviceRequests: []
         };
     },
+
     async mounted() {
         await this.fetchServiceRequests();
     },
+
     methods: {
         async handleRequestAction(sr_id, action) {
             if (action === "Cancel") {
@@ -67,7 +70,7 @@ export default {
                 });
         
                 if (res.ok) {
-                    alert("Service request closed successfully.");
+                    alert("Service Request closed successfully.");
                     await this.fetchServiceRequests();  
                 } else {
                     throw new Error("Failed to close service request.");
@@ -90,7 +93,7 @@ export default {
     
                 if (res.ok) {
                     this.serviceRequests = this.serviceRequests.filter(req => req.sr_id !== sr_id); 
-                    alert("Service request canceled successfully.");
+                    alert("Service Request canceled successfully.");
                 } else {
                     throw new Error("Failed to cancel service request.");
                 }

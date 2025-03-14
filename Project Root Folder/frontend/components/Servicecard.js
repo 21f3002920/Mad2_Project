@@ -49,6 +49,7 @@ export default{
     </div>
     </div>
 `,
+
 data() {
     return {
         showEditing: false,
@@ -140,6 +141,7 @@ data() {
             }
         }
     },
+    
     computed: {
         filteredProfessionals() {
             if (!this.searchQuery) return this.professionals;
@@ -151,6 +153,7 @@ data() {
             );
         }
     },
+
     components: {
         Professionalcard
     }   

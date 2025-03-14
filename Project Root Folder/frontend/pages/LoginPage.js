@@ -14,12 +14,14 @@ export default {
     </div>
     </div>
     `,
+
     data(){
         return{
             email: null,
             password: null,
         }
     },
+    
     methods : {
         async submitLogin(){
             try{

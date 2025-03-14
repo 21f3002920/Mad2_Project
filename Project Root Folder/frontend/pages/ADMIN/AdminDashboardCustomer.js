@@ -2,7 +2,7 @@ import Customercard from "../../components/Customercard.js";
 
 export default {
     template: `
-    <div class="main-content">
+    <div class="main-content1">
         <h1>CUSTOMER MANAGEMENT</h1>
         <h2>--------------</h2>
         <Customercard v-for="customer in customers" 

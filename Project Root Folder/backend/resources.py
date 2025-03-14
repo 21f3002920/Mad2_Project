@@ -1,11 +1,14 @@
-from flask import request, jsonify
+from flask import request, jsonify, current_app as app
 from flask_restful import Api, Resource, fields, marshal_with
 from datetime import datetime
 from flask_security import auth_required, current_user
 from backend.models import db, User,Service, Customer, Professional, ServiceRequest
 
+cache=app.cache
+
 api=Api(prefix='/api')
 
+#marshal_with Fields
 service_fields= {
     'service_id':fields.Integer,
     'service_name':fields.String,
@@ -31,11 +34,11 @@ user_fields = {
 }
 
 
-# SERVICES DATA
-
+#SERVICES Data
 class ServiceAPI(Resource):
-    @marshal_with(service_fields)
     @auth_required('token')
+    @cache.memoize(timeout=5)
+    @marshal_with(service_fields)
     def get(self, service_id):
         service=Service.query.get(service_id)
 
@@ -73,8 +76,9 @@ class ServiceAPI(Resource):
         db.session.commit()
 
 class ServiceListAPI(Resource):
-    @marshal_with(service_fields)
     @auth_required('token')
+    @cache.cached(timeout=5)
+    @marshal_with(service_fields)
     def get(self):
         service=Service.query.all()
         return service
@@ -99,10 +103,10 @@ api.add_resource(ServiceAPI, '/services/<int:service_id>')
 api.add_resource(ServiceListAPI, '/services')
 
 
-# CUSTOMERS DATA
-
+#CUSTOMERS Data
 class CustomerListAPI(Resource):
     @auth_required('token')
+    @cache.cached(timeout=5)
     def get(self):
         customers = db.session.query(Customer, User).join(User, Customer.c_userid == User.id).all()
         result = []
@@ -160,10 +164,10 @@ api.add_resource(CustomerListAPI, '/customers')
 api.add_resource(CustomerAPI, '/customers/<int:c_id>')
 
 
-# PROFESSIONALS DATA
-
+#PROFESSIONALS Data
 class ProfessionalListAPI(Resource):
     @auth_required('token')
+    @cache.cached(timeout=5)
     def get(self):
         professionals = db.session.query(Professional, User, Service).join(User, Professional.p_userid == User.id).join(Service, Professional.p_serviceid == Service.service_id).all()
         result = []
@@ -227,10 +231,10 @@ class ProfessionalAPI(Resource):
 api.add_resource(ProfessionalAPI, '/professionals/<int:p_id>')
 
 
-# DATA OF PROFESSIONALS TO GIVEN SERVICE
-
+#Professionals and their Services Data
 class ProfessionalsByServiceAPI(Resource):
     @auth_required('token')
+    @cache.memoize(timeout=5)
     def get(self, service_id):
         try:
             service_id = int(service_id)  
@@ -276,8 +280,7 @@ class ProfessionalsByServiceAPI(Resource):
 api.add_resource(ProfessionalsByServiceAPI, '/services/<int:service_id>/professionals')
 
 
-# BOOKING OF SERVICE BY CUSTOMER
-
+#Booking Service by Customer
 class BookServiceAPI(Resource):
     @auth_required('token')
     def post(self):
@@ -324,10 +327,10 @@ class BookServiceAPI(Resource):
 api.add_resource(BookServiceAPI, '/service/book')
 
 
-# SERVICE REQUEST DATA FOR CUSTOMERS
-
+#Service Request data for Customers
 class ServiceRequestsForCustomerAPI(Resource):
     @auth_required('token')
+    @cache.cached(timeout=5)
     def get(self):
         try:
             customer = Customer.query.filter_by(c_userid=current_user.id).first()
@@ -368,10 +371,10 @@ class ServiceRequestsForCustomerAPI(Resource):
 api.add_resource(ServiceRequestsForCustomerAPI, '/customer/service_requests')
 
 
-# SERVICE REQUEST DATA FOR PROFESSIONALS
-
+#Service Request data for Professionals
 class ServiceRequestsForProfessionalAPI(Resource):
     @auth_required('token')
+    @cache.cached(timeout=5)
     def get(self):
         professional = Professional.query.filter_by(p_userid=current_user.id).first()
         if not professional:
@@ -406,8 +409,7 @@ class ServiceRequestsForProfessionalAPI(Resource):
 api.add_resource(ServiceRequestsForProfessionalAPI, '/professional/service_requests')
 
 
-# ACCEPTING OR REJECTING SERVICE REQUEST
-
+#Accepting or Rejecting Service Request by Professional
 class UpdateServiceRequestStatusAPI(Resource):
     @auth_required('token')
     def put(self, sr_id):
@@ -435,8 +437,7 @@ class UpdateServiceRequestStatusAPI(Resource):
 api.add_resource(UpdateServiceRequestStatusAPI, '/service_requests/<int:sr_id>/status')
 
 
-# CLOSE SERVICE REQUEST BY CUSTOMER
-
+#Close Service Request by Customer
 class CloseServiceRequestAPI(Resource):
     @auth_required('token')
     def put(self, sr_id):
@@ -471,8 +472,7 @@ class CloseServiceRequestAPI(Resource):
 api.add_resource(CloseServiceRequestAPI, '/service_requests/<int:sr_id>/close')
 
 
-# CLOSE SERVICE REQUEST BY PROFESSIONAL
-
+#Close Service Request by Professional
 class CloseServiceRequestByProfessionalAPI(Resource):
     @auth_required('token')
     def put(self, sr_id):
@@ -507,8 +507,7 @@ class CloseServiceRequestByProfessionalAPI(Resource):
 api.add_resource(CloseServiceRequestByProfessionalAPI, '/service_requests/<int:sr_id>/close_by_professional')
 
 
-# DELETE/CANCEL SERVICE REQUEST
-
+#Cancelling or Deleting Service Request by Customer
 class DeleteServiceRequestAPI(Resource):
     @auth_required('token')
     def delete(self, sr_id):
